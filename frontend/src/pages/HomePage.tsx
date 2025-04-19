@@ -1,50 +1,44 @@
 import React, { useState } from "react";
-import { Typography, Container } from "@mui/material";
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
-import musicNote from "../assets/music_note.png";
-import { AuthUser, useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import AuthLayout from "../layouts/AuthLayout";
 import loginImage from "../assets/login.png";
 import registerImage from "../assets/register.png";
+import AppLayout from "../layouts/AppLayout";
+import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 
 const HomePage: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { login } = useAuth();
+  const { user, login } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
 
-  const handleSuccess = (user: AuthUser) => {
-    setIsAuthenticated(true);
+  const handleAuthSuccess = (user: any) => {
     login(user);
   };
 
-  if (isAuthenticated) {
+  if (!user) {
     return (
-      <Container maxWidth="sm" sx={{ textAlign: "center", py: 8 }}>
-        <img
-          src={musicNote}
-          alt="Waiting for next song..."
-          style={{ width: 64, height: 64, marginBottom: 20 }}
-        />
-        <Typography variant="h5">Waiting for next song…</Typography>
-      </Container>
-    );
-  }
-
-  return (
       <AuthLayout backgroundImage={isLogin ? loginImage : registerImage}>
         {isLogin ? (
           <LoginForm
-            onSuccess={handleSuccess}
+            onSuccess={handleAuthSuccess}
             toggleMode={() => setIsLogin(false)}
           />
         ) : (
           <RegisterForm
-            onSuccess={handleSuccess}
+            onSuccess={handleAuthSuccess}
             toggleMode={() => setIsLogin(true)}
           />
         )}
       </AuthLayout>
+    );
+  }
+
+  // ✅ User is logged in → show main layout
+  return (
+    <AppLayout>
+      <WaitingForSong />
+    </AppLayout>
   );
 };
 

@@ -1,21 +1,31 @@
 import React from "react";
+import { isValid } from "zod";
 import { useForm } from "react-hook-form";
-import { Box, Button, Typography, MenuItem, TextField, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterSchema } from "../../schemas/AuthSchemas";
 import { InputField } from "../../components/form/InputField";
 import { authService } from "../../services/authService";
 import { AuthUser } from "../../context/AuthContext";
 import logoMobile from "../../assets/logo.png";
-
-
+import { SelectField } from "../form/SelectField";
+import { instrumentOptions } from "../../constants/instruments";
 
 interface RegisterFormProps {
   onSuccess: (user: AuthUser) => void;
   toggleMode: () => void;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, toggleMode }) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  onSuccess,
+  toggleMode,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -25,8 +35,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, toggleMode }) =>
     formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
     defaultValues: {
       instrument: "",
+      username: "",
+      password: "",
     },
   });
 
@@ -77,26 +90,26 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess, toggleMode }) =>
         type="password"
         register={register}
         error={errors.password}
+        helperText={
+          errors.password?.message || "Password must be at least 6 characters"
+        }
       />
 
-      <TextField
+      <SelectField
         label="Instrument"
-        fullWidth
-        margin="normal"
-        select
-        {...register("instrument")}
-        error={!!errors.instrument}
-        helperText={errors.instrument?.message}
-      >
-        <MenuItem value="">Select instrument</MenuItem>
-        <MenuItem value="guitar">Guitar</MenuItem>
-        <MenuItem value="bass">Bass</MenuItem>
-        <MenuItem value="drums">Drums</MenuItem>
-        <MenuItem value="keyboard">Keyboard</MenuItem>
-        <MenuItem value="vocals">Vocals</MenuItem>
-      </TextField>
+        options={instrumentOptions}
+        registration={register("instrument")}
+        error={errors.instrument}
+      />
 
-      <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 2 }}>
+      <Button
+        disabled={!isValid}
+        type="submit"
+        fullWidth
+        variant="contained"
+        size="large"
+        sx={{ mt: 2 }}
+      >
         Register
       </Button>
 

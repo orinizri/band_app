@@ -61,6 +61,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
         name="username"
         register={register}
         error={errors.username}
+        helperText={errors.username?.message || "Username must be at least 2 characters"}
       />
       <InputField
         label="Password"
@@ -68,6 +69,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
         type="password"
         register={register}
         error={errors.password}
+        helperText={errors.password?.message || "Password must be at least 4 characters"}
       />
 
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
