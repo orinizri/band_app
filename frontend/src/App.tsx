@@ -1,29 +1,25 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-// Layout
-
-// Pages
-import RehearsalPage from "./pages/RehearsalPage";
-import { ROUTES } from "./constants/routes";
-import HomePage from "./pages/Home";
+import { Routes, Route } from "react-router-dom";
 import AppLayout from "./layouts/AppLayout";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
+import RehearsalPage from "./pages/RehearsalPage";
 
-// Constants
-
-const App: React.FC = () => {
+const App = () => {
   return (
-    <Router>
-      <AppLayout>
-        <Routes>
-          <Route path={ROUTES.HOME} element={<HomePage />} />
-          <Route path={ROUTES.LOGIN} element={<div>Login Page</div>} />
-          <Route path={ROUTES.REGISTER} element={<div>Register Page</div>} />
-          <Route path={ROUTES.REHEARSAL} element={<RehearsalPage />} />
-          <Route path={ROUTES.NOT_FOUND} element={<div>404 Not Found</div>} />
-        </Routes>
-      </AppLayout>
-    </Router>
+    <Routes>
+      {/* Auth pages - no layout */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+
+      {/* App routes - wrapped in AppLayout */}
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/rehearsal" element={<RehearsalPage />} />
+        {/* <Route path="/admin" element={<AdminPage />} /> */}
+      </Route>
+    </Routes>
   );
 };
 

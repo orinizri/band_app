@@ -1,18 +1,15 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import { Container, Box } from "@mui/material";
-import Navbar from "../components/layout/NavBar";
+import NavBar from "../components/layout/NavBar";
 
-interface AppLayoutProps {
-  children: React.ReactNode;
-}
-
-const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+const AppLayout: React.FC = () => {
   return (
     <>
-      <Navbar />
+      <NavBar />
       <Box component="main" sx={{ py: 4 }}>
         <Container maxWidth="lg">
-          {children}
+          <Outlet />
         </Container>
       </Box>
     </>

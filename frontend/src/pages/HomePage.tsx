@@ -1,8 +1,6 @@
 import React from "react";
 import { Container } from "@mui/material";
-import Navbar from "../components/layout/NavBar";
 import "../styles/global.scss";
-
 
 const HomePage: React.FC = () => {
   return (
