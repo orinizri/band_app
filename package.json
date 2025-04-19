@@ -1,0 +1,13 @@
+{
+  "name": "jamoveo-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run start --prefix frontend\" \"npm run start:dev --prefix backend\"",
+    "frontend": "npm run start --prefix frontend",
+    "backend": "npm run start:dev --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
