@@ -1,15 +1,12 @@
 import React from "react";
-import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
-  backgroundImage: string;
+  backgroundImage?: string;
 }
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({
-  children,
-  backgroundImage,
-}) => {
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children, backgroundImage }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -17,32 +14,42 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
     <Box
       sx={{
         display: "flex",
-        minHeight: "100vh",
-        flexDirection: isMobile ? "column" : "row",
+        height: "100vh",         // ✅ ensure it fills full screen
+        overflow: "hidden",      // ✅ prevent image pushing height
       }}
     >
-      {/* Left: Form content */}
+      {/* Left side (form) */}
       <Box
         sx={{
           flex: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          px: 3,
-          py: 6,
+          px: 4,
+          bgcolor: "#fff",
+          height: "100%",        // ✅ force this column to fill parent height
         }}
       >
-        <Container maxWidth="sm">{children}</Container>
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: 420,       // control max width of form
+          }}
+        >
+          {children}
+        </Box>
       </Box>
 
-      {/* Right: Image (hidden on mobile) */}
-      {!isMobile && (
+      {/* Right side (image) */}
+      {!isMobile && backgroundImage && (
         <Box
           sx={{
             flex: 1,
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            height: "100%",      // ✅ match left side height
           }}
         />
       )}

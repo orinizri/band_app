@@ -1,0 +1,99 @@
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginSchema } from "../../schemas/AuthSchemas";
+import { InputField } from "../../components/form/InputField";
+import { authService } from "../../services/authService";
+import { AuthUser } from "@/context/AuthContext";
+import logoMobile from "../../assets/logo.png";
+
+interface LoginFormProps {
+  onSuccess: (user: AuthUser) => void;
+  toggleMode: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      const res = await authService.login(data);
+      const { user, token } = res.data;
+      onSuccess({ ...user, token });
+    } catch (err) {
+      console.error("Login failed", err);
+    }
+  };
+
+  return (
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      {isMobile && (
+        <Box mb={3} textAlign="center">
+          <img src={logoMobile} alt="JaMoveo Logo" style={{ maxWidth: 120 }} />
+          <Typography variant="body2" color="text.secondary" mt={1}>
+            Welcome to JaMoveo
+          </Typography>
+        </Box>
+      )}
+
+      {!isMobile && (
+        <Typography variant="body2" color="text.secondary" mb={1}>
+          Welcome to JaMoveo
+        </Typography>
+      )}
+
+      <Typography variant="h4" fontWeight={600} mb={2}>
+        Log In
+      </Typography>
+
+      <InputField
+        label="Username"
+        name="username"
+        register={register}
+        error={errors.username}
+      />
+      <InputField
+        label="Password"
+        name="password"
+        type="password"
+        register={register}
+        error={errors.password}
+      />
+
+      <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+        Log In
+      </Button>
+
+      <Typography variant="body2" textAlign="center" mt={2}>
+        Don’t have an account?{" "}
+        <button
+          type="button"
+          aria-label="Switch to register form"
+          onClick={toggleMode}
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            color: theme.palette.primary.main,
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+        >
+          Register
+        </button>
+      </Typography>
+    </Box>
+  );
+};
+
+export default LoginForm;

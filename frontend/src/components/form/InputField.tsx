@@ -16,16 +16,14 @@ export const InputField: React.FC<Props> = ({
   type = "text",
   register,
   error,
-}) => {
-  return (
-    <TextField
-      label={label}
-      type={type}
-      fullWidth
-      margin="normal"
-      {...register(name)}
-      error={!!error}
-      helperText={error?.message}
-    />
-  );
-};
+}) => (
+  <TextField
+    label={label}
+    type={type}
+    fullWidth
+    margin="normal"
+    {...register(name)}
+    error={!!error}
+    helperText={error?.message}
+  />
+);
