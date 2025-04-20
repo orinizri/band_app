@@ -1,3 +1,4 @@
+import { UserRole } from 'src/utilities/user/user.enums';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,8 +6,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
-export type UserRole = 'player' | 'singer' | 'admin';
 
 @Entity('users')
 export class User {
@@ -22,7 +21,7 @@ export class User {
   @Column()
   instrument: string;
 
-  @Column({ type: 'varchar', default: 'player' })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.PLAYER })
   role: UserRole;
 
   @CreateDateColumn()

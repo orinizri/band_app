@@ -34,6 +34,7 @@ const HomePage: React.FC = () => {
       </AuthLayout>
     );
   }
+  if (user.role === "admin") return ;
 
   // ✅ User is logged in → show main layout
   return (

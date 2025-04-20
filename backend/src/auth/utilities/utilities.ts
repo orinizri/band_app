@@ -6,19 +6,20 @@ export const generateAuthResponse = (
   user: User,
   jwtService: JwtService,
 ): AuthResponse => {
-  const token = jwtService.sign({
-    sub: user.id,
+  const userPayload = {
     username: user.username,
+    instrument: user.instrument,
     role: user.role,
-  });
+  };
+  const token = jwtService.sign({ ...userPayload, sub: user.id });
 
   return {
     user: {
-      username: user.username,
-      instrument: user.instrument,
-      role: user.role,
+      id: user.id,
+      ...userPayload,
     },
     token,
+    error: null,
   };
 };
 

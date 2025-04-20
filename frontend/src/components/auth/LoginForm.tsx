@@ -20,7 +20,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });

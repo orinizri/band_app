@@ -1,4 +1,12 @@
-import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  MaxLength,
+  Matches,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
+import { UserRole } from '../../utilities/user/user.enums';
 
 export class RegisterDto {
   @IsString()
@@ -15,6 +23,10 @@ export class RegisterDto {
   @Matches(/[^a-zA-Z0-9]/, { message: 'Must include special character' })
   password: string;
 
+  @IsOptional()
   @IsString()
   instrument: string;
+
+  @IsEnum(UserRole)
+  role: UserRole;
 }

@@ -8,7 +8,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, RegisterSchema } from "../../schemas/AuthSchemas";
+import {
+  getRegisterSchema,
+  registerSchema,
+  RegisterSchema,
+} from "../../schemas/AuthSchemas";
 import { InputField } from "../../components/form/InputField";
 import { authService } from "../../services/authService";
 import { AuthUser } from "../../context/AuthContext";
@@ -19,11 +23,13 @@ import { instrumentOptions } from "../../constants/instruments";
 interface RegisterFormProps {
   onSuccess: (user: AuthUser) => void;
   toggleMode: () => void;
+  isAdmin?: boolean;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
   toggleMode,
+  isAdmin,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -33,10 +39,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(getRegisterSchema(isAdmin || false)),
     mode: "onChange",
     defaultValues: {
-      instrument: "",
       username: "",
       password: "",
     },
@@ -99,16 +104,18 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         }
       />
 
-      <SelectField
-        label="Instrument"
-        options={instrumentOptions}
-        registration={register("instrument")}
-        error={errors.instrument}
-        helperText={errors.instrument?.message || "Instrument is required"}
-        onChange={(e) => {
-          register("instrument").onChange(e);
-        }}
-      />
+      {!isAdmin && (
+        <SelectField
+          label="Instrument"
+          options={instrumentOptions}
+          registration={register("instrument")}
+          error={errors.instrument}
+          helperText={errors.instrument?.message || "Instrument is required"}
+          onChange={(e) => {
+            register("instrument").onChange(e);
+          }}
+        />
+      )}
 
       <Button
         type="submit"
