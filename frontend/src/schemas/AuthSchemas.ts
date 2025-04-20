@@ -15,8 +15,21 @@ export const loginSchema = z.object({
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type LoginSchema = z.infer<typeof loginSchema>;
 
-export function getRegisterSchema(isAdmin: boolean) {
-  return isAdmin
-    ? registerSchema.omit({ instrument: true }) // No instrument required for admin
-    : registerSchema;
+interface SchemaTypes {
+  register: RegisterSchema;
+  login: LoginSchema;
+}
+export function getSchema(
+  schemaType: keyof SchemaTypes,
+  isAdmin: boolean = false
+) {
+  switch (schemaType) {
+    case "register":
+      return isAdmin
+        ? registerSchema.omit({ instrument: true }) // No instrument required for admin
+        : registerSchema;
+    case "login":
+    default:
+      return loginSchema;
+  }
 }

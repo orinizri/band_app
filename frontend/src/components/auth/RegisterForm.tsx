@@ -8,13 +8,15 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getRegisterSchema, RegisterSchema } from "../../schemas/AuthSchemas";
+import { getSchema, RegisterSchema } from "../../schemas/AuthSchemas";
 import { InputField } from "../../components/form/InputField";
 import { authService } from "../../services/authService";
 import { AuthUser } from "../../context/AuthContext";
 import logoMobile from "../../assets/logo.png";
 import { SelectField } from "../form/SelectField";
 import { instrumentOptions } from "../../constants/instruments";
+import JamoveoWelcome from "./shared/JaMoveoWelcome";
+import AuthTitle from "./shared/AuthTitle";
 
 interface RegisterFormProps {
   onSuccess: (user: AuthUser) => void;
@@ -32,7 +34,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   console.log("isAdmin", isAdmin);
-  const schema = getRegisterSchema(isAdmin || false);
+  // Get the schema based on the isAdmin prop + the form type
+  const schema = getSchema("register", isAdmin || false);
   const {
     register,
     handleSubmit,
@@ -66,27 +69,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      {isMobile && (
+      {isMobile ? (
         <Box mb={3} textAlign="center">
           <img src={logoMobile} alt="JaMoveo Logo" style={{ maxWidth: 120 }} />
-          <Typography variant="body2" color="text.secondary" mt={1}>
-            Welcome to JaMoveo
-          </Typography>
+          <JamoveoWelcome />
         </Box>
+      ) : (
+        <JamoveoWelcome />
       )}
 
-      {!isMobile && (
-        <Typography variant="body2" color="text.secondary" mb={1}>
-          Welcome to JaMoveo
-        </Typography>
-      )}
-
-      <Typography variant="h4" fontWeight={600} mb={1}>
-        {title}
-      </Typography>
-      <Typography variant="body1" mb={3} color="text.secondary">
-        Join the band and start rehearsing 🎶
-      </Typography>
+      <AuthTitle title={title || "Log In"} fontWeight={600} mb={2} fontSize="2rem" />
 
       <InputField
         label="Username"
@@ -132,13 +124,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         Register
       </Button>
 
-      <Typography textAlign="center" mt={2}>
+      <Typography textAlign="center" fontSize="1rem">
         Already have an account?{" "}
         <button
           type="button"
           aria-label="Switch to login form"
           onClick={toggleMode}
           style={{
+            fontSize: "inherit",
             background: "none",
             border: "none",
             padding: 0,

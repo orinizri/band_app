@@ -7,10 +7,12 @@ import loginImage from "../assets/login.png";
 import registerImage from "../assets/register.png";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 import AdminDashboard from "../components/admin/AdminDashboard";
+import RoleToggle from "../components/shared/RoleToggle";
 
 const HomePage = (): React.ReactElement => {
   const { user, login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleAuthSuccess = (user: AuthUser) => {
     // This function is called when the user successfully logs in or registers
@@ -25,16 +27,22 @@ const HomePage = (): React.ReactElement => {
           <LoginForm
             onSuccess={handleAuthSuccess}
             toggleMode={() => setIsLogin(false)}
-            title="Login"
+            title={isAdmin ? "Admin Log In" : "Log In"}
+            isAdmin={isAdmin}
           />
         ) : (
           <RegisterForm
             onSuccess={handleAuthSuccess}
             toggleMode={() => setIsLogin(true)}
-            title="Create Account"
-            isAdmin={false}
+            title={isAdmin ? "Create Admin Account" : "Create Account"}
+            isAdmin={isAdmin}
           />
         )}
+        <RoleToggle
+          isAdmin={isAdmin}
+          setIsAdmin={setIsAdmin}
+          isLogin={isLogin}
+        />
       </AuthLayout>
     );
   }
