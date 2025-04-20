@@ -7,8 +7,9 @@ import loginImage from "../assets/login.png";
 import registerImage from "../assets/register.png";
 import AppLayout from "../layouts/AppLayout";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
+import AdminDashboard from "@/components/admin/AdminDashboard";
 
-const HomePage = () => {
+const HomePage = (): React.ReactElement => {
   const { user, login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
@@ -34,7 +35,12 @@ const HomePage = () => {
       </AuthLayout>
     );
   }
-  if (user.role === "admin") return ;
+  if (user.role === "admin")
+    return (
+      <AppLayout>
+        <AdminDashboard />
+      </AppLayout>
+    );
 
   // ✅ User is logged in → show main layout
   return (
