@@ -1,11 +1,13 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
+  Alert,
   Box,
   Button,
   Typography,
   useMediaQuery,
   useTheme,
+  Collapse,
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getSchema, LoginSchema } from "../../schemas/AuthSchemas";
@@ -31,6 +33,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }): React.ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [loginError, setLoginError] = React.useState<string | null>(null);
   // Get the schema based on the isAdmin prop + the form type
   const schema = getSchema("login", isAdmin || false);
   const {
@@ -44,8 +47,15 @@ const LoginForm: React.FC<LoginFormProps> = ({
   const onSubmit = async (data: LoginSchema) => {
     try {
       const res = await authService.login(data);
-      const { user, token } = res.data;
+      const { user, token, error } = res.data;
+      console.log("Login response", res.data);
+      if (error || !user) {
+        console.error("Login error", error);
+        setLoginError(error || "Login failed");
+        return;
+      }
       onSuccess({ ...user, token });
+      setLoginError(null);
     } catch (err) {
       console.error("Login failed", err);
     }
@@ -85,13 +95,19 @@ const LoginForm: React.FC<LoginFormProps> = ({
         register={register}
         error={errors.password}
         helperText={
-          errors.password?.message || "Password must be at least 4 characters"
+          errors.password?.message || "Password must be at least 6 characters"
         }
       />
-
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
         Log In
       </Button>
+      <Collapse in={!!loginError}>
+        <Box mt={2} mb={2}>
+          <Alert severity="error" variant="filled">
+            {loginError}
+          </Alert>
+        </Box>
+      </Collapse>
 
       <Typography variant="body2" textAlign="center" fontSize="1rem">
         Don’t have an account?{" "}

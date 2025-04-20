@@ -25,6 +25,12 @@ interface RegisterFormProps {
   title?: string;
 }
 
+enum RoleTypes {
+  "admin" = "admin",
+  "player" = "player",
+  "singer" = "singer",
+}
+
 const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
   toggleMode,
@@ -54,7 +60,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   const onSubmit = async (data: RegisterSchema) => {
     try {
       console.log("Register data", data);
-      const res = await authService.register(data);
+      if (data.instrument) {
+        // If the instrument is selected, set the role to "player"
+        data.role = RoleTypes.player;
+      } else if (isAdmin) {
+        data.role = RoleTypes.admin;
+        data.instrument = undefined; // Remove instrument if admin
+      }
+      const res = await authService.register({ ...data });
       const { user, token, error } = res.data;
       console.log("Register response", res.data);
       if (error) {
@@ -78,7 +91,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         <JamoveoWelcome />
       )}
 
-      <AuthTitle title={title || "Log In"} fontWeight={600} mb={2} fontSize="2rem" />
+      <AuthTitle
+        title={title || "Log In"}
+        fontWeight={600}
+        mb={2}
+        fontSize="2rem"
+      />
 
       <InputField
         label="Username"

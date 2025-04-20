@@ -5,6 +5,7 @@ export const registerSchema = z.object({
   username: usernameField,
   password: passwordField,
   instrument: z.string().min(1, "Please select an instrument").optional(),
+  role: z.enum(["admin", "player", "singer"]).optional(),
 });
 
 export const loginSchema = z.object({
