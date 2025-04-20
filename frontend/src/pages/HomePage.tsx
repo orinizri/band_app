@@ -7,7 +7,7 @@ import loginImage from "../assets/login.png";
 import registerImage from "../assets/register.png";
 import AppLayout from "../layouts/AppLayout";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
-import AdminDashboard from "@/components/admin/AdminDashboard";
+import AdminDashboard from "../components/admin/AdminDashboard";
 
 const HomePage = (): React.ReactElement => {
   const { user, login } = useAuth();
