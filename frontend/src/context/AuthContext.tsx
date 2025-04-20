@@ -20,7 +20,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 // Provider component
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
-}) => {
+}): React.ReactElement => {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   const login = (user: AuthUser) => {

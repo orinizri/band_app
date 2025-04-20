@@ -1,6 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Box, Button, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginSchema } from "../../schemas/AuthSchemas";
 import { InputField } from "../../components/form/InputField";
@@ -11,9 +17,14 @@ import logoMobile from "../../assets/logo.png";
 interface LoginFormProps {
   onSuccess: (user: AuthUser) => void;
   toggleMode: () => void;
+  title?: string;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
+const LoginForm: React.FC<LoginFormProps> = ({
+  onSuccess,
+  toggleMode,
+  title,
+}): React.ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -53,7 +64,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
       )}
 
       <Typography variant="h4" fontWeight={600} mb={2}>
-        Log In
+        {title}
       </Typography>
 
       <InputField
@@ -61,7 +72,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
         name="username"
         register={register}
         error={errors.username}
-        helperText={errors.username?.message || "Username must be at least 2 characters"}
+        helperText={
+          errors.username?.message || "Username must be at least 2 characters"
+        }
       />
       <InputField
         label="Password"
@@ -69,7 +82,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, toggleMode }) => {
         type="password"
         register={register}
         error={errors.password}
-        helperText={errors.password?.message || "Password must be at least 4 characters"}
+        helperText={
+          errors.password?.message || "Password must be at least 4 characters"
+        }
       />
 
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>

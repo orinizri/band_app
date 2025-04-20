@@ -4,7 +4,7 @@ import { Box, Container, Typography } from "@mui/material";
 // import SongList from "./SongList";
 import { Song } from "../../types/song"; // Define a type for songs if needed
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard = (): React.ReactElement => {
   const [songs, setSongs] = useState<Song[]>([]);
 
   const handleSearch = async (query: string) => {

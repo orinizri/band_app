@@ -17,7 +17,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   registration,
   error,
   helperText,
-}) => {
+}): React.ReactElement => {
   return (
     <TextField
       label={label}

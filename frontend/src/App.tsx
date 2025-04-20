@@ -1,11 +1,7 @@
-import HomePage from "./pages/HomePage";
+import AppRoutes from "./routes/appRoutes";
 
 const App = () => {
-  return (
-    <div style={{ height: "100%" }}>
-      <HomePage />;
-    </div>
-  );
+  return <AppRoutes />;
 };
 
 export default App;

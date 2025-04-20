@@ -5,7 +5,6 @@ import { AuthUser, useAuth } from "../context/AuthContext";
 import AuthLayout from "../layouts/AuthLayout";
 import loginImage from "../assets/login.png";
 import registerImage from "../assets/register.png";
-import AppLayout from "../layouts/AppLayout";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 import AdminDashboard from "../components/admin/AdminDashboard";
 
@@ -13,8 +12,9 @@ const HomePage = (): React.ReactElement => {
   const { user, login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
-  // Handle successful authentication and update AuthContext
   const handleAuthSuccess = (user: AuthUser) => {
+    // This function is called when the user successfully logs in or registers
+    // Including token inside the AuthUser object
     login(user);
   };
 
@@ -25,11 +25,14 @@ const HomePage = (): React.ReactElement => {
           <LoginForm
             onSuccess={handleAuthSuccess}
             toggleMode={() => setIsLogin(false)}
+            title="Login"
           />
         ) : (
           <RegisterForm
             onSuccess={handleAuthSuccess}
             toggleMode={() => setIsLogin(true)}
+            title="Create Account"
+            isAdmin={false}
           />
         )}
       </AuthLayout>
@@ -37,16 +40,16 @@ const HomePage = (): React.ReactElement => {
   }
   if (user.role === "admin")
     return (
-      <AppLayout>
+      <AuthLayout>
         <AdminDashboard />
-      </AppLayout>
+      </AuthLayout>
     );
 
   // ✅ User is logged in → show main layout
   return (
-    <AppLayout>
+    <AuthLayout>
       <WaitingForSong />
-    </AppLayout>
+    </AuthLayout>
   );
 };
 

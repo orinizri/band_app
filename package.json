@@ -8,6 +8,7 @@
     "backend": "npm run start:dev --prefix backend"
   },
   "devDependencies": {
+    "@types/passport-jwt": "^4.0.1",
     "concurrently": "^8.2.0"
   }
 }

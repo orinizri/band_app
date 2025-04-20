@@ -6,7 +6,7 @@ interface AuthLayoutProps {
   backgroundImage?: string;
 }
 
-const AuthLayout: React.FC<AuthLayoutProps> = ({ children, backgroundImage }) => {
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children, backgroundImage }): React.ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 

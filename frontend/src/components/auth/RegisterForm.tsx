@@ -8,11 +8,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  getRegisterSchema,
-  registerSchema,
-  RegisterSchema,
-} from "../../schemas/AuthSchemas";
+import { getRegisterSchema, RegisterSchema } from "../../schemas/AuthSchemas";
 import { InputField } from "../../components/form/InputField";
 import { authService } from "../../services/authService";
 import { AuthUser } from "../../context/AuthContext";
@@ -24,26 +20,30 @@ interface RegisterFormProps {
   onSuccess: (user: AuthUser) => void;
   toggleMode: () => void;
   isAdmin?: boolean;
+  title?: string;
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
   onSuccess,
   toggleMode,
   isAdmin,
-}) => {
+  title,
+}): React.ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+  console.log("isAdmin", isAdmin);
+  const schema = getRegisterSchema(isAdmin || false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<RegisterSchema>({
-    resolver: zodResolver(getRegisterSchema(isAdmin || false)),
+    resolver: zodResolver(schema),
     mode: "onChange",
     defaultValues: {
       username: "",
       password: "",
+      instrument: isAdmin ? undefined : "",
     },
     shouldUnregister: false,
   });
@@ -52,7 +52,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     try {
       console.log("Register data", data);
       const res = await authService.register(data);
-      const { user, token } = res.data;
+      const { user, token, error } = res.data;
+      console.log("Register response", res.data);
+      if (error) {
+        console.error("Register error", error);
+        return;
+      }
       onSuccess({ ...user, token });
     } catch (err) {
       console.error("Register failed", err);
@@ -77,7 +82,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       )}
 
       <Typography variant="h4" fontWeight={600} mb={1}>
-        Create Account
+        {title}
       </Typography>
       <Typography variant="body1" mb={3} color="text.secondary">
         Join the band and start rehearsing 🎶

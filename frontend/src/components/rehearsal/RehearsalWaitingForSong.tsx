@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import musicNote from "../../assets/music_note.png"; // ⬅️ replace with your path
 
-const WaitingForSong: React.FC = () => {
+const WaitingForSong = (): React.ReactElement => {
   return (
     <Box
       display="flex"

@@ -18,7 +18,7 @@ export const InputField: React.FC<Props> = ({
   register,
   error,
   helperText,
-}) => (
+}): React.ReactElement => (
   <TextField
     label={label}
     type={type}
