@@ -1,46 +1,51 @@
-import React, { useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
-// import SongSearchBar from "./SongSearchBar";
-// import SongList from "./SongList";
-import { Song } from "../../types/song"; // Define a type for songs if needed
+import React, { useEffect, useState } from "react";
+import { Box, Container, CircularProgress, Typography } from "@mui/material";
+import SongSearchBar from "../songs/SongSearchBar";
+import SongList from "../songs/SongList";
+import { Song } from "../songs/SongCard";
+import { songService } from "../../services/songService";
 
-const AdminDashboard = (): React.ReactElement => {
+const AdminDashboard: React.FC = () => {
+  const [query, setQuery] = useState("");
   const [songs, setSongs] = useState<Song[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSearch = async (query: string) => {
-    // TODO: Replace with real API call
-    console.log("Searching for:", query);
+  useEffect(() => {
+    const loadSongs = async () => {
+      try {
+        const fetched = await songService.fetchSongs();
+        setSongs(fetched);
+      } catch (error) {
+        console.error("Failed to load songs", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Simulated response
-    const fakeResults: Song[] = [
-      {
-        id: "1",
-        title: "Hey Jude",
-        artist: "The Beatles",
-        image: "/assets/hey_jude.jpg",
-      },
-      {
-        id: "2",
-        title: "Imagine",
-        artist: "John Lennon",
-        image: "/assets/imagine.jpg",
-      },
-    ];
+    loadSongs();
+  }, []);
 
-    setSongs(fakeResults);
-  };
+  const filteredSongs = songs.filter((song) =>
+    `${song.title} ${song.artist}`.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h5" fontWeight="bold" mb={2}>
-        Search any song…
-      </Typography>
-
-      {/* <SongSearchBar onSearch={handleSearch} /> */}
-
-      <Box mt={4}>
-        {/* <SongList songs={songs} /> */}
-      </Box>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <SongSearchBar query={query} onQueryChange={setQuery} />
+      {loading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : filteredSongs.length > 0 ? (
+        <SongList
+          songs={filteredSongs}
+          onSelect={(song) => console.log("Select", song)}
+        />
+      ) : (
+        <Typography textAlign="center" mt={4}>
+          No songs found.
+        </Typography>
+      )}
     </Container>
   );
 };

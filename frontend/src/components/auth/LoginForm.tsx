@@ -44,14 +44,27 @@ const LoginForm: React.FC<LoginFormProps> = ({
     resolver: zodResolver(schema),
   });
 
+  React.useEffect(() => {
+    if (loginError) {
+      const timer = setTimeout(() => {
+        setLoginError(null);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [loginError]);
+
   const onSubmit = async (data: LoginSchema) => {
     try {
       const res = await authService.login(data);
       const { user, token, error } = res.data;
       console.log("Login response", res.data);
-      if (error || !user) {
+      if (error || !user || !token) {
         console.error("Login error", error);
         setLoginError(error || "Login failed");
+        return;
+      }
+      if (user.role === "admin") {
+        setLoginError("Admin login is not allowed here");
         return;
       }
       onSuccess({ ...user, token });
@@ -101,7 +114,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
         Log In
       </Button>
-      <Collapse in={!!loginError}>
+      <Collapse in={!!loginError} unmountOnExit={false}>
         <Box mt={2} mb={2}>
           <Alert severity="error" variant="filled">
             {loginError}
