@@ -7,6 +7,8 @@ interface SelectFieldProps {
   options: { label: string; value: string }[];
   registration: UseFormRegisterReturn;
   error?: FieldError;
+  helperText?: string;
+  onChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
 export const SelectField: React.FC<SelectFieldProps> = ({
@@ -14,6 +16,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   options,
   registration,
   error,
+  helperText,
 }) => {
   return (
     <TextField
@@ -23,7 +26,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
       select
       {...registration}
       error={!!error}
-      helperText={error?.message}
+      helperText={helperText || error?.message}
     >
       {options.map((opt) => (
         <MenuItem key={opt.value} value={opt.value}>

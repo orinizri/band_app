@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoginForm from "../components/auth/LoginForm";
 import RegisterForm from "../components/auth/RegisterForm";
-import { useAuth } from "../context/AuthContext";
+import { AuthUser, useAuth } from "../context/AuthContext";
 import AuthLayout from "../layouts/AuthLayout";
 import loginImage from "../assets/login.png";
 import registerImage from "../assets/register.png";
@@ -12,7 +12,8 @@ const HomePage: React.FC = () => {
   const { user, login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
-  const handleAuthSuccess = (user: any) => {
+  // Handle successful authentication and update AuthContext
+  const handleAuthSuccess = (user: AuthUser) => {
     login(user);
   };
 

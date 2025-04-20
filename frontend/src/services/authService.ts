@@ -1,7 +1,11 @@
 import { api } from "../lib/axios";
-import { LoginSchema, RegisterSchema } from "../schemas/AuthSchemas";
+import { RegisterSchema } from "@/schemas/AuthSchemas";
 
 export const authService = {
-  login: (data: LoginSchema) => api.post("/auth/login", data),
-  register: (data: RegisterSchema) => api.post("/auth/register", data),
+  register: (data: RegisterSchema) => {
+    return api.post("/auth/register", data);
+  },
+  login: (data: { username: string; password: string }) => {
+    return api.post("/auth/login", data);
+  },
 };

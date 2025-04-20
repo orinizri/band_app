@@ -1,5 +1,4 @@
 import React from "react";
-import { isValid } from "zod";
 import { useForm } from "react-hook-form";
 import {
   Box,
@@ -32,7 +31,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     mode: "onChange",
@@ -41,10 +40,12 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
       username: "",
       password: "",
     },
+    shouldUnregister: false,
   });
 
   const onSubmit = async (data: RegisterSchema) => {
     try {
+      console.log("Register data", data);
       const res = await authService.register(data);
       const { user, token } = res.data;
       onSuccess({ ...user, token });
@@ -82,6 +83,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         name="username"
         register={register}
         error={errors.username}
+        helperText={
+          errors.username?.message || "Username must be at least 3 characters"
+        }
       />
 
       <InputField
@@ -100,10 +104,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         options={instrumentOptions}
         registration={register("instrument")}
         error={errors.instrument}
+        helperText={errors.instrument?.message || "Instrument is required"}
+        onChange={(e) => {
+          register("instrument").onChange(e);
+        }}
       />
 
       <Button
-        disabled={!isValid}
         type="submit"
         fullWidth
         variant="contained"
