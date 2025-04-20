@@ -8,7 +8,7 @@ import registerImage from "../assets/register.png";
 import AppLayout from "../layouts/AppLayout";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   const { user, login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
