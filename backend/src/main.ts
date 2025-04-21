@@ -22,7 +22,7 @@ async function bootstrap() {
 
   const port = config.get<number>('PORT') || 3000;
   await app.listen(port);
-  console.log(
+  console.info(
     `🚀 Server ready at ${
       isProd
         ? process.env.REACT_APP_API_URL

@@ -7,11 +7,12 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { sendSelectedSong } from "../../utilities/utilities";
 import SongSearchBar from "../songs/SongSearchBar";
 import SongList from "../songs/SongList";
 import { songService } from "../../services/songService";
 import { useNavigate } from "react-router-dom";
-import { Song } from "../../types/song";
+import { Song } from "../../types/song.type";
 import { AuthUser } from "../../context/AuthContext";
 
 const AdminDashboard = ({
@@ -33,7 +34,6 @@ const AdminDashboard = ({
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        console.log("Fetching songs...", user);
         if (!user || !user.token || user.role !== "admin") {
           navigate("/");
           return;
@@ -56,9 +56,10 @@ const AdminDashboard = ({
   );
 
   const handleSongSelect = (song: Song) => {
-    console.log("Selected song:", song);
+    console.info("Selected song:", song);
     setSelectedSong(song);
-    // TODO: Send via socket to LivePage
+    // Send via socket to LivePage
+    sendSelectedSong(song);
   };
 
   return (

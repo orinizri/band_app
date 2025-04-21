@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import SongCard from "./SongCard";
-import { Song } from "../../types/song";
+import { Song } from "../../types/song.type";
 
 interface SongListProps {
   songs: Song[];

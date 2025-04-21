@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { isHebrew } from "../../utilities/utilities";
-import { Song } from "../../types/song";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Song } from "../../types/song.type";
 
 export type SongWord = {
   lyrics: string;

@@ -14,7 +14,7 @@ export class SongsService {
 
   private loadSongsFromJson() {
     const dataFolder = path.resolve(process.cwd(), 'src/song/data');
-    console.log('Loading songs from:', dataFolder);
+    console.info('Loading songs from:', dataFolder);
     const files = fs.readdirSync(dataFolder);
 
     files.forEach((file) => {

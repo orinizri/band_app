@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, TextField, InputAdornment, useTheme } from "@mui/material";
+import { Box, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface SongSearchBarProps {
@@ -11,7 +11,7 @@ const SongSearchBar: React.FC<SongSearchBarProps> = ({
   query,
   onQueryChange,
 }) => {
-  //   const theme = useTheme();
+  // const theme = useTheme();
 
   return (
     <Box mb={3}>

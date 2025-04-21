@@ -21,12 +21,10 @@ export class AuthService {
   async register(data: RegisterDto): Promise<AuthResponse> {
     try {
       const role: UserRole = resolveUserRole(data.role as string);
-      console.log('User role:', role);
       // Check if the user already exists
       const existingUserResponse = this.userService.findByUsername(
         data.username,
       );
-      console.log('Existing user response:', existingUserResponse);
       if (existingUserResponse.user)
         return generateErrorResponse('Username is already taken');
       // Hash the password and create the user
@@ -36,7 +34,6 @@ export class AuthService {
         password: hashedPassword,
         role,
       });
-      console.log('Create user response:', createUserResponse);
       if (createUserResponse.error) {
         return generateErrorResponse(createUserResponse.error);
       }

@@ -3,16 +3,16 @@ import { Box, Typography, Fab, useTheme, useMediaQuery } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CloseIcon from "@mui/icons-material/Close";
 import LiveSongDisplay from "./LiveSongDisplay";
-import { Song } from "../../types/song";
+import { Song } from "../../types/song.type";
 import { AuthUser } from "../../context/AuthContext";
 
 interface LivePageWrapperProps {
   song: Song;
   user: AuthUser;
-  onQuit?: () => void; // shown only if role === 'admin'
+  onQuit?: () => void;
 }
 
-const LivePageWrapper: React.FC<LivePageWrapperProps> = ({
+const LiveDisplayWrapper: React.FC<LivePageWrapperProps> = ({
   song,
   user,
   onQuit,
@@ -99,4 +99,4 @@ const LivePageWrapper: React.FC<LivePageWrapperProps> = ({
   );
 };
 
-export default LivePageWrapper;
+export default LiveDisplayWrapper;

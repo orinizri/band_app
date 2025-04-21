@@ -9,7 +9,7 @@ import {
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import { Song } from "../../types/song";
+import { Song } from "../../types/song.type";
 
 interface SongCardProps {
   song: Song;

@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { SongsModule } from './song/song.module';
+import { AppGateway } from './gateway/app.gateway';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SongsModule } from './song/song.module';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    AppGateway,
   ],
 })
 export class AppModule {}

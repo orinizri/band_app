@@ -1,5 +1,5 @@
 import { api } from "../lib/axios";
-import { Song } from "../types/song";
+import { Song } from "../types/song.type";
 import { prepareHeaders } from "../utilities/utilities";
 
 export const songService = {

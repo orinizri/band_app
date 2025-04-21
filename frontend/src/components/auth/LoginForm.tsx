@@ -57,7 +57,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
     try {
       const res = await authService.login(data);
       const { user, token, error } = res.data;
-      console.log("Login response", res.data);
       if (error || !user || !token) {
         console.error("Login error", error);
         setLoginError(error || "Login failed");

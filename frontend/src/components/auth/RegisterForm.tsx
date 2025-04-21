@@ -39,7 +39,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 }): React.ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  console.log("isAdmin", isAdmin);
   // Get the schema based on the isAdmin prop + the form type
   const schema = getSchema("register", isAdmin || false);
   const {
@@ -59,17 +58,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 
   const onSubmit = async (data: RegisterSchema) => {
     try {
-      console.log("Register data", data);
-      if (data.instrument) {
-        // If the instrument is selected, set the role to "player"
-        data.role = RoleTypes.player;
-      } else if (isAdmin) {
+      if (isAdmin) {
         data.role = RoleTypes.admin;
         data.instrument = undefined; // Remove instrument if admin
+      } else if (data.instrument === "vocals") {
+        data.role = RoleTypes.singer;
+      } else {
+        data.role = RoleTypes.player;
       }
       const res = await authService.register({ ...data });
       const { user, token, error } = res.data;
-      console.log("Register response", res.data);
       if (error) {
         console.error("Register error", error);
         return;

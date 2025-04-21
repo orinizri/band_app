@@ -26,7 +26,6 @@ export class UserService {
   private users: User[] = [];
 
   async create(userData: RegisterDto): Promise<createUserResponse> {
-    console.log('userData', userData);
     if (!userData.username || !userData.password)
       return createUserResponse(
         null,
@@ -36,23 +35,19 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const newUser = { ...userData, password: hashedPassword } as User;
     this.users.push(newUser);
-    console.log('this.users', this.users);
     return createUserResponse(newUser);
   }
 
   findByUsername(username: string): createUserResponse {
-    console.log('findByUsername username', username);
     const user = this.users.find((user) => user.username === username);
-    console.log('findByUsername user', user);
     return createUserResponse(user, null, user ? null : 'User not found');
   }
 
   findAll(): createUserResponse {
-    console.log('findAll', this.users);
     return createUserResponse(
       null,
       this.users,
-      this.users ? null : 'User not found',
+      this.users?.length ? null : 'User not found',
     );
   }
 }

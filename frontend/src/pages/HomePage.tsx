@@ -9,7 +9,9 @@ import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import RoleToggle from "../components/shared/RoleToggle";
 import LiveDisplayWrapper from "../components/live/LiveDisplayWrapper";
-import { Song } from "../types/song";
+import { Song } from "../types/song.type";
+import { sendQuitSong } from "../utilities/utilities";
+import { useLiveSong } from "../hooks/useLiveSong";
 
 const HomePage = (): React.ReactElement => {
   const { user, login } = useAuth();
@@ -17,12 +19,19 @@ const HomePage = (): React.ReactElement => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [, setError] = useState<string | null>(null);
-
+  const liveSong = useLiveSong();
+  
   const handleAuthSuccess = (user: AuthUser) => {
     // This function is called when the user successfully logs in or registers
     // Including token inside the AuthUser object
     login(user);
   };
+
+  const onQuitSong = () => {
+    // This function is called when the user quits the song
+    setSelectedSong(null);
+    sendQuitSong()
+  }
 
   if (!user) {
     return (
@@ -54,7 +63,11 @@ const HomePage = (): React.ReactElement => {
     return (
       <AuthLayout>
         {selectedSong ? (
-          <LiveDisplayWrapper song={selectedSong} user={user} />
+          <LiveDisplayWrapper
+            song={selectedSong}
+            user={user}
+            onQuit={user.role === "admin" ? onQuitSong : undefined}
+          />
         ) : (
           <AdminDashboard
             setSelectedSong={setSelectedSong}
@@ -65,10 +78,14 @@ const HomePage = (): React.ReactElement => {
       </AuthLayout>
     );
 
-  // ✅ User is logged in → show main layout
+  // User
   return (
     <AuthLayout>
-      <WaitingForSong />
+      {liveSong ? (
+        <LiveDisplayWrapper song={liveSong} user={user} onQuit={sendQuitSong} />
+      ) : (
+        <WaitingForSong />
+      )}
     </AuthLayout>
   );
 };
