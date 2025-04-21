@@ -10,21 +10,22 @@ import {
 import SongSearchBar from "../songs/SongSearchBar";
 import SongList from "../songs/SongList";
 import { songService } from "../../services/songService";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Song } from "../../types/song";
+import { AuthUser } from "../../context/AuthContext";
 
 const AdminDashboard = ({
   setSelectedSong,
   setError,
+  user,
 }: {
   setSelectedSong: (x: Song) => void;
   setError: (x: string | null) => void;
+  user: AuthUser;
 }) => {
   const [query, setQuery] = useState("");
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();

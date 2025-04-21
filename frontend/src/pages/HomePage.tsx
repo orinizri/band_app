@@ -8,7 +8,7 @@ import registerImage from "../assets/register.png";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import RoleToggle from "../components/shared/RoleToggle";
-import LiveSongDisplay from "../components/live/LiveSongDisplay";
+import LiveDisplayWrapper from "../components/live/LiveDisplayWrapper";
 import { Song } from "../types/song";
 
 const HomePage = (): React.ReactElement => {
@@ -54,11 +54,12 @@ const HomePage = (): React.ReactElement => {
     return (
       <AuthLayout>
         {selectedSong ? (
-          <LiveSongDisplay song={selectedSong} />
+          <LiveDisplayWrapper song={selectedSong} user={user} />
         ) : (
           <AdminDashboard
             setSelectedSong={setSelectedSong}
             setError={setError}
+            user={user}
           />
         )}
       </AuthLayout>
