@@ -6,17 +6,8 @@ export class Song {
   id: string;
 
   @Column()
-  title: string;
+  song: string[];
 
   @Column()
-  artist: string;
-
-  @Column({ nullable: true })
-  imageUrl?: string;
-
-  @Column({ type: 'text' })
-  chords: string;
-
-  @Column({ type: 'text' })
-  lyrics: string;
+  title: string;
 }

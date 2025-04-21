@@ -9,13 +9,7 @@ import {
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-
-export interface Song {
-  id: string;
-  title: string;
-  artist: string;
-  image?: string;
-}
+import { Song } from "../../types/song";
 
 interface SongCardProps {
   song: Song;
@@ -43,10 +37,10 @@ const SongCard: React.FC<SongCardProps> = ({ song, onSelect }) => {
     >
       {/* Left side: image + text */}
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        {song.image && (
+        {song.imageUrl && (
           <Box
             component="img"
-            src={song.image}
+            src={song.imageUrl}
             alt={song.title}
             sx={{
               width: 48,

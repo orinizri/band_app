@@ -5,13 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { SongModule } from './song/song.module';
+import { SongsModule } from './song/song.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
-    SongModule,
+    SongsModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   providers: [

@@ -8,15 +8,17 @@ export interface JwtPayload {
   sub: string; // user id
   username: string;
   role: UserRole;
+  token: string;
 }
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private config: ConfigService) {
-    const jwtSecret = config.get<string>('JWT_SECRET');
+    const jwtSecret = config.get<string>('JWT_SECRET_KEY');
     if (!jwtSecret) {
       throw new Error('JWT_SECRET is not defined in the configuration');
     }
+    console.log('jwtSecret', jwtSecret);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,

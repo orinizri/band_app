@@ -14,29 +14,18 @@ export class SongsService {
 
   private loadSongsFromJson() {
     const dataFolder = path.resolve(process.cwd(), 'src/song/data');
+    console.log('Loading songs from:', dataFolder);
     const files = fs.readdirSync(dataFolder);
 
     files.forEach((file) => {
       const filePath = path.join(dataFolder, file);
       const raw = fs.readFileSync(filePath, 'utf8');
 
-      interface SongJson {
-        title: string;
-        artist?: string;
-        image?: string;
-        chords?: string;
-        lyrics?: string;
-      }
-
-      const json = JSON.parse(raw) as SongJson;
-
+      const json = JSON.parse(raw) as string[];
       const song: Song = {
         id: uuidv4(),
-        title: json.title,
-        artist: json.artist || 'Unknown',
-        imageUrl: json.image || undefined,
-        chords: json.chords || '',
-        lyrics: json.lyrics || '',
+        title: file.split('.')[0].replace(/_/g, ' '),
+        song: json,
       };
 
       this.songs.push(song);

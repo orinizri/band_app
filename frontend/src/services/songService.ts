@@ -1,9 +1,15 @@
 import { api } from "../lib/axios";
-import { Song } from "@/components/songs/SongCard";
+import { Song } from "../types/song";
+import { prepareHeaders } from "../utilities/utilities";
 
 export const songService = {
-  async fetchSongs(): Promise<Song[]> {
-    const response = await api.get("/songs");
+  /**
+   * Fetches all songs from the server.
+   * @returns {Promise<Song[]>} A promise that resolves to an array of songs.
+   */
+  async fetchSongs(token: string): Promise<Song[]> {
+    // Fetch all songs from the server
+    const response = await api.get("/songs", prepareHeaders(token));
     return response.data;
   },
 };

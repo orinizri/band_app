@@ -8,11 +8,15 @@ import registerImage from "../assets/register.png";
 import WaitingForSong from "../components/rehearsal/RehearsalWaitingForSong";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import RoleToggle from "../components/shared/RoleToggle";
+import LiveSongDisplay from "../components/live/LiveSongDisplay";
+import { Song } from "../types/song";
 
 const HomePage = (): React.ReactElement => {
   const { user, login } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   const handleAuthSuccess = (user: AuthUser) => {
     // This function is called when the user successfully logs in or registers
@@ -49,7 +53,14 @@ const HomePage = (): React.ReactElement => {
   if (user.role === "admin")
     return (
       <AuthLayout>
-        <AdminDashboard />
+        {selectedSong ? (
+          <LiveSongDisplay song={selectedSong} />
+        ) : (
+          <AdminDashboard
+            setSelectedSong={setSelectedSong}
+            setError={setError}
+          />
+        )}
       </AuthLayout>
     );
 

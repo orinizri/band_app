@@ -1,49 +1,88 @@
-import React, { useEffect, useState } from "react";
-import { Box, Container, CircularProgress, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Container,
+  CircularProgress,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import SongSearchBar from "../songs/SongSearchBar";
 import SongList from "../songs/SongList";
-import { Song } from "../songs/SongCard";
 import { songService } from "../../services/songService";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Song } from "../../types/song";
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard = ({
+  setSelectedSong,
+  setError,
+}: {
+  setSelectedSong: (x: Song) => void;
+  setError: (x: string | null) => void;
+}) => {
   const [query, setQuery] = useState("");
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const loadSongs = async () => {
+    const fetchSongs = async () => {
       try {
-        const fetched = await songService.fetchSongs();
-        setSongs(fetched);
-      } catch (error) {
-        console.error("Failed to load songs", error);
+        console.log("Fetching songs...", user);
+        if (!user || !user.token || user.role !== "admin") {
+          navigate("/");
+          return;
+        }
+        const data = await songService.fetchSongs(user.token);
+        setSongs(data);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to load songs:", err);
+        setError("Failed to load songs. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
-
-    loadSongs();
-  }, []);
+    fetchSongs();
+  }, [user, navigate, setError]);
 
   const filteredSongs = songs.filter((song) =>
-    `${song.title} ${song.artist}`.toLowerCase().includes(query.toLowerCase())
+    `${song.title}`.toLowerCase().includes(query.toLowerCase())
   );
 
+  const handleSongSelect = (song: Song) => {
+    console.log("Selected song:", song);
+    setSelectedSong(song);
+    // TODO: Send via socket to LivePage
+  };
+
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: isMobile ? 3 : 6 }}>
+      <Typography
+        variant="h4"
+        fontWeight={600}
+        mb={3}
+        textAlign="center"
+        color="primary"
+      >
+        Select a Song
+      </Typography>
+
       <SongSearchBar query={query} onQueryChange={setQuery} />
+
       {loading ? (
         <Box display="flex" justifyContent="center" mt={4}>
           <CircularProgress />
         </Box>
       ) : filteredSongs.length > 0 ? (
-        <SongList
-          songs={filteredSongs}
-          onSelect={(song) => console.log("Select", song)}
-        />
+        <SongList songs={filteredSongs} onSelect={handleSongSelect} />
       ) : (
-        <Typography textAlign="center" mt={4}>
-          No songs found.
+        <Typography textAlign="center" mt={4} color="text.secondary">
+          No songs found. Try a different name 🎵
         </Typography>
       )}
     </Container>

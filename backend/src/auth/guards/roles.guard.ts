@@ -28,7 +28,7 @@ export class RolesGuard implements CanActivate {
     // 3. Get the authenticated user from the request
     const request = context.switchToHttp().getRequest<{ user: User }>();
     const { user } = request;
-
+    console.log('request.user', user);
     // 4. If user doesn't exist or role is missing, deny access
     if (!user || !user.role) {
       throw new ForbiddenException('Access denied. Missing user role.');
@@ -36,6 +36,7 @@ export class RolesGuard implements CanActivate {
 
     // 5. Check if the user has at least one of the required roles
     const hasRole = requiredRoles.includes(user.role);
+    console.log('hasRole', hasRole);
     if (!hasRole) {
       throw new ForbiddenException(
         `Access denied. Requires role: ${requiredRoles.join(', ')}`,

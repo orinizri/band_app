@@ -1,14 +1,14 @@
 import 'reflect-metadata';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { RolesGuard } from './auth/guards/roles.guard';
+// import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+// import { RolesGuard } from './auth/guards/roles.guard';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
-  const reflector = app.get(Reflector);
+
   const isProd = config.get<string>('NODE_ENV') === 'production';
   // ✅ CORS: Allow dev + production frontend
   app.enableCors({
@@ -19,9 +19,6 @@ async function bootstrap() {
     ],
     credentials: true,
   });
-
-  // ✅ Global guards: JWT + Role-based access
-  app.useGlobalGuards(new JwtAuthGuard(reflector), new RolesGuard(reflector));
 
   const port = config.get<number>('PORT') || 3000;
   await app.listen(port);
